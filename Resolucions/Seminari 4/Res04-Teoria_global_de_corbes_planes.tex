@@ -1,0 +1,151 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsthm, amsmath, mathtools, amssymb}
+\usepackage[left=1.8cm,right=1.8cm,top=2cm,bottom=2cm]{geometry}
+\usepackage[colorlinks,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\usepackage{array}
+\usepackage[catalan]{babel}
+\usepackage[affil-it]{authblk}
+\usepackage{physics}
+
+\newcommand{\vf}[1]{\boldsymbol{\mathrm{#1}}} % math style for vectors and matrices and vector-values functions (previously it was \*vb{#1} but this does not apply to greek letters)
+\newcommand{\RR}{\ensuremath{\mathbb{R}}}
+\newcommand{\ZZ}{\ensuremath{\mathbb{Z}}}
+\newcommand{\NN}{\ensuremath{\mathbb{N}}}
+
+\newtheoremstyle{math}
+{\topsep}   % ABOVESPACE
+{\topsep}   % BELOWSPACE
+{}  % BODYFONT
+{0pt}       % INDENT (empty value is the same as 0pt)
+{\bfseries} % HEADFONT
+{.}         % HEADPUNCT
+{5pt plus 1pt minus 1pt} % HEADSPACE
+{\thmname{#1}\thmnumber{}%
+\thmnote{{ \bfseries(#3)}}}   
+
+\newtheorem{exercice}{Exercici}
+\theoremstyle{remark}
+\newtheorem*{resolution}{Resolució}
+\theoremstyle{math}
+\newtheorem{theorem}{Teorema}
+\DeclareMathOperator{\Int}{Int} % interior set
+
+\renewcommand{\theenumi}{\alph{enumi})}
+\renewcommand{\labelenumi}{\alph{enumi})}
+
+\title{\bfseries\large SEMINARI 4. TEORIA GLOBAL DE CORBES PLANES.}
+
+\author{Víctor Ballester Ribó\endgraf NIU: 1570866}
+\date{\parbox{\linewidth}{\centering
+  Geometria diferencial\endgraf
+  Grau en Matemàtiques\endgraf
+  Universitat Autònoma de Barcelona\endgraf
+  Març de 2022}}
+
+\setlength{\parindent}{0pt}
+
+\begin{document}
+\selectlanguage{catalan}
+\maketitle
+\begin{theorem}[Umlaufsatz]
+  El nombre de rotació d'una corba tancada simple és $\pm 1$.
+\end{theorem}
+\setcounter{exercice}{5}
+\begin{exercice}
+  Demostrem l'Umlaufsatz per deformació. Sigui $\vf{x}=(x,y):[0,\ell]\rightarrow\RR^2$ tancada i simple parametritzada per l'arc. Prenent els eixos convenientment, podem suposar que $y(t)$ és mínim per $t= 0$. Suposem a més que $\vf{x}(0) = (0,0)$ i $\vf{x}'(0) = (1,0)$.
+  \begin{enumerate}
+    \item Considereu el triangle $\Delta=\{(s,t):0\leq s\leq t\leq \ell\}$ i l'aplicació $\Psi:\Delta\rightarrow\RR$ definida per:
+          $$\Psi(s,t)=\left\{
+            \begin{array}{lcl}
+              \frac{\vf{x}(t)-\vf{x}(s)}{\|\vf{x}(t)-\vf{x}(s)\|} & \text{si} & s\ne t,(s,t)\ne (0,\ell) \\
+              \vf{x}'(s)                                          & \text{si} & s=t                      \\
+              -\vf{x}'(0)                                         & \text{si} & (s,t)=(0,\ell)
+            \end{array}
+            \right.$$
+          Interpreteu-la geomètricament i proveu que és contínua.
+          \begin{resolution}
+            Primer de tot vegem que la funció és contínua $\Psi(s,t)$. Com que $\vf{x}$ és almenys de classe $\mathcal{C}^1$ i l'aplicació norma és contínua, deduïm que les funcions components de $\Psi(s,t)$ són totes contínues. Cal veure ara la continuïtat en els punts de la forma $s=t$ i $(s,t)=(0,\ell)$.
+            Sigui $s\in [0,\ell]$ i $t=s+\varepsilon$ amb $\varepsilon\ne 0$ tal que $(s,s+\varepsilon)\in\Delta$. Per tant, hem de tenir $\varepsilon>0$. Aleshores tenim que:
+            \begin{align*}
+              \lim_{t\to s}\Psi(s,t) & =\lim_{\varepsilon\to 0}\frac{\vf{x}(s+\varepsilon)-\vf{x}(s)}{\|\vf{x}(s+\varepsilon)-\vf{x}(s)\|}                                                                                 \\
+                                     & =\lim_{\varepsilon\to 0}\frac{\vf{x}(s+\varepsilon)-\vf{x}(s)}{\varepsilon}\cdot\frac{\varepsilon}{\|\vf{x}(s+\varepsilon)-\vf{x}(s)\|}                                             \\
+                                     & =\lim_{\varepsilon\to 0}\frac{\vf{x}(s+\varepsilon)-\vf{x}(s)}{\varepsilon}\cdot\lim_{\varepsilon\to 0}\frac{1}{\left\|\frac{\vf{x}(s+\varepsilon)-\vf{x}(s)}{\varepsilon}\right\|} \\
+                                     & =\vf{x}'(s)\cdot\frac{1}{\left\|\displaystyle\lim_{\varepsilon\to 0}\frac{\vf{x}(s+\varepsilon)-\vf{x}(s)}{\varepsilon}\right\|}                                                    \\
+                                     & = \frac{\vf{x}'(s)}{\|\vf{x}'(s)\|}                                                                                                                                                 \\
+                                     & = \vf{x}'(s)
+            \end{align*}
+            on en l'última igualtat hem aplicat que la corba està parametritzada per l'arc. Per a l'altre cas, si fem $s=\epsilon$ i $t=\ell -\varepsilon$ amb $\varepsilon,\epsilon>0$ perquè es compleixi $(s,t)\in\Delta$, tenim que:
+
+            \begin{align*}
+              \lim_{\substack{t\to \ell                                                                                                                                                                                                                                         \\s\to 0}}\Psi(s,t) & =\lim_{\epsilon,\varepsilon\to 0}\frac{\vf{x}(\ell-\varepsilon)-\vf{x}(\epsilon)}{\|\vf{x}(\ell-\varepsilon)-\vf{x}(\epsilon)\|}                                                                                 \\
+               & =\lim_{\epsilon,\varepsilon\to 0}\left[(-\varepsilon)\frac{\vf{x}(\ell-\varepsilon)-\vf{x}(\ell)}{-\varepsilon}+\epsilon\frac{\vf{x}(0)-\vf{x}(\epsilon)}{\epsilon}\right]\cdot\frac{1}{\|\vf{x}(\ell-\varepsilon)-\vf{x}(\epsilon)\|}                         \\
+               & =\lim_{\epsilon,\varepsilon\to 0}\left[-\varepsilon\vf{x}'(\ell)-\epsilon\vf{x}'(0)\right]\cdot\frac{1}{\|\vf{x}(\ell-\varepsilon)-\vf{x}(\epsilon)\|}                                                                                                         \\
+               & =-\vf{x}'(0)\lim_{\epsilon,\varepsilon\to 0}\frac{\varepsilon+\epsilon}{\|\vf{x}(\ell-\varepsilon)-\vf{x}(\epsilon)\|}                                                                                                                                         \\
+               & =-\vf{x}'(0)\cdot\frac{1}{\left\|\displaystyle\lim_{\epsilon,\varepsilon\to 0}\frac{\vf{x}(\ell-\varepsilon)-\vf{x}(\epsilon)}{\varepsilon+\epsilon}\right\|}                                                                                                  \\
+               & =-\vf{x}'(0)\cdot\frac{1}{\left\|\displaystyle\lim_{\epsilon,\varepsilon\to 0}\frac{1}{\varepsilon+\epsilon}\left[(-\varepsilon)\frac{\vf{x}(\ell-\varepsilon)-\vf{x}(\ell)}{-\varepsilon}+\epsilon\frac{\vf{x}(0)-\vf{x}(\epsilon)}{\epsilon}\right]\right\|} \\
+               & =-\vf{x}'(0)\cdot\frac{1}{\left\|\displaystyle\lim_{\epsilon,\varepsilon\to 0}\frac{1}{\varepsilon+\epsilon}\left[-\varepsilon\vf{x}'(\ell)-\epsilon\vf{x}'(0)\right]\right\|}                                                                                 \\
+               & = -\frac{\vf{x}'(0)}{\|\vf{x}'(0)\|}                                                                                                                                                                                                                           \\
+               & = -\vf{x}'(0)
+            \end{align*}
+            on hem aplicat que la corba és tancada per deduir que $\vf{x}(\ell)=\vf{x}(0)$ i $\vf{x}'(\ell)=\vf{x}'(0)$.
+
+            L'interpretació geomètrica d'aquesta funció és la següent: $\Psi(s,t)$ dona el vector director unitari que va des de la posició $\vf{x}(s)$ a $\vf{x}(t)$ per a valors $(s,t)\in\Int \Delta$ i l'exten de manera contínua a tot $(s,t)\in \Delta$.
+          \end{resolution}
+          \item\label{apartat2} Donat $u\in[0,1]$ considereu una corba $c_u:[0,\ell]\rightarrow\Delta$ definida a trossos com segueix.
+          \begin{itemize}
+            \item Per $0\leq t\leq \ell/2$ fem que $c_u(t)$ recorri amb velocitat constant el segment des de $(0,0)$ fins a $\frac{\ell}{2}(1-u,1+u)$.
+            \item Per $\ell/2\leq t\leq \ell$ fem que $c_u(t)$ recorri amb velocitat constant el segment des de $\frac{\ell}{2}(1-u,1+u)$ fins a $(\ell,\ell)$.
+          \end{itemize}
+          Proveu que existeix una aplicació contínua $\Theta:[0,1]\times[0,\ell]\rightarrow\RR$ tal que $\Psi(c_u(t))=(\cos(\Theta(u,t)),\sin(\Theta(u,t)))$.
+          \begin{resolution}
+            Denotem per $(e_1,e_2)$ la base canònica. Primer de tot observem que $\|\Psi(s,t)\|=1$ $\forall (s,t)\in\Delta$. Definim $\Theta(u,t)$ com l'angle (no restringit a cap interval\footnote{És a dir, $\Theta(u,t)\in\RR$ i no només únicament a l'interval $[0,2\pi)$.}) que formen els vectors unitaris $\Psi(c_u(t))$ i $e_1$. Per tant, es compleix que: $$\cos(\Theta(u,t))=\langle\Psi(c_u(t)),e_1\rangle$$
+            Observem que $\Theta(u,t)$ és contínua perquè $\Psi$, $c_u(t)$ i $\langle\cdot,e_1\rangle$ són funcions contínues. Vegem ara que necessàriament hem de tenir $\Psi(c_u(t))=(\cos(\Theta(u,t)),\sin(\Theta(u,t)))$. Per això, expressem $\Psi(c_u(t))$ en termes de la base canònica de la forma següent: $$\Psi(c_u(t))=\lambda(u,t)e_1+\mu(u,t)e_2$$
+            Sabem que $\lambda(u,t)=\langle\Psi(c_u(t)),e_1\rangle=\cos(\Theta(u,t))$ i $\mu(u,t)=\langle\Psi(c_u(t)),e_2\rangle$. Com que s'ha de complir que ${\lambda(u,t)}^2+{\mu(u,t)}^2=1$, necessàriament hem de tenir $\mu(u,t)=\pm\sin(\Theta(u,t))$. Per decidir quina de les dues opcions és, fixem-nos que per $u=1$ i $0<t<\frac{\ell}{2}$ tenim que $\Psi(c_u(t))=\frac{\vf{x}(t)}{\|\vf{x}(t)\|}$, que té component $y$ major a zero per el supòsit inicial que $y(t)$ és mínim per $t= 0$. Per tant, l'angle $\Theta(1,t)$, ha d'estar entre $2\pi k+0$ i $2\pi k+\pi$ per algun $k\in\ZZ$ (que compleix $\Theta(1,0)=2\pi k$), el que implica que $\mu(u,t)=\sin(\Theta(u,t))$. Per tant, $\Psi(c_u(t))=(\cos(\Theta(u,t)),\sin(\Theta(u,t)))$.
+
+            Observem que per a tot $u\in[0,1]$, sense pèrdua de generalitat podem suposar $\Theta(u,0)=0$. Si no fos així, aleshores $\Theta(u,0)=2\pi k$ amb $k\in\ZZ$, però llavors podríem definir una nova funció $\tilde\Theta(u,t)=\Theta(u,t)-2\pi k$ que compleix els mateixos requisits que $\Theta$ i tal que $\tilde{\Theta}(u,0)=0$. Per tant, d'ara en endavant suposarem $\Theta(u,0)=0$.
+          \end{resolution}
+    \item Proveu que $\Theta(u,\ell)-\Theta(u,0)\in 2\pi\ZZ$ i deduïu que el valor és independent de $u$.
+          \begin{resolution}
+            Observem que $c_u(\ell)=(\ell,\ell)$ $\forall u\in[0,1]$ i $c_u(0)=(0,0)$ $\forall u\in[0,1]$. Per tant, d'una banda tenim que:
+            \begin{equation}\label{apartat3}
+              \Psi(c_u(\ell))-\Psi(c_u(0))=\vf{x}'(\ell)-\vf{x}'(0)=0
+            \end{equation}
+            ja que la corba $\vf{x}$ és tancada. D'altra banda, per l'apartat anterior tenim que:
+            \begin{align*}
+              0=\Psi(c_u(\ell))-\Psi(c_u(0)) & =(\cos(\Theta(u,\ell)),\sin(\Theta(u,\ell)))-(\cos(\Theta(u,0)),\sin(\Theta(u,0))) \\
+                                             & =(\cos(\Theta(u,\ell))-\cos(\Theta(u,0)),\sin(\Theta(u,\ell))-\sin(\Theta(u,0)))
+            \end{align*}
+            Ara bé, sabem que si tenim $x,y\in\RR$ tals que
+            $$\left\{
+              \begin{array}{c}
+                \cos x=\cos y \\
+                \sin x=\sin y
+              \end{array}\right.
+            $$
+            aleshores és $x=y+2\pi k$ per a algun $k\in\ZZ$. Per tant, de l'equació anterior es desprèn que $\Theta(u,\ell)=\Theta(u,0)+2\pi k$ per algun $k\in\ZZ$, o equivalentment, $\Theta(u,\ell)-\Theta(u,0)\in2\pi\ZZ$. Vegem ara que la diferència $\Theta(u,\ell)-\Theta(u,0)$ no depèn de $u$. Suposem que tenim $u_1,u_2\in[0,1]$ tals que $\Theta(u_1,\ell)-\Theta(u_1,0)=2\pi k_1$ i $\Theta(u_2,\ell)-\Theta(u_2,0)=2\pi k_2$ amb $k_1,k_2\in\ZZ$ i $k_1\ne k_2$. Per l'observació que hem fet en fórmula \eqref{apartat3}, deduïm que $\Psi(c_{u_1}(\ell))=\Psi(c_{u_2}(\ell))=\vf{x}'(\ell)$ i $\Psi(c_{u_1}(0))=\Psi(c_{u_2}(0))=\vf{x}'(0)$. Per tant, per ser en el temps $t=0$, tenim $\Theta(u_1,0)=\Theta(u_2,0)$. D'altra banda, $\Theta(u_1,\ell)$ i $\Theta(u_2,\ell)$ difereixen d'un múltiple enter de $2\pi$. Ara bé, $\Theta(\cdot,\ell)$ és una funció contínua (perquè $\Theta$ ho és) que pren valors a $2\pi\ZZ$. D'altra banda, recordem que una funció contínua prenen valors a $\ZZ$ ha de ser necessàriament constant. Per tant, una funció contínua prenen valors a $2\pi\ZZ$ ha de ser també necessàriament constant. D'aquí deduïm que $\Theta(u_1,\ell)=\Theta(u_2,\ell)$. Per tant, tenim que:
+            \begin{align*}
+              0=0+0 & =\left[\Theta(u_1,\ell)-\Theta(u_2,\ell)\right]-\left[\Theta(u_1,0)-\Theta(u_2,0)\right] \\
+                    & =\left[\Theta(u_1,\ell)-\Theta(u_1,0)\right]-\left[\Theta(u_2,\ell)-\Theta(u_2,0)\right] \\
+                    & =2\pi k_1-2\pi k_2\ne 0
+            \end{align*}
+            que és una contradicció. Per tant, la diferència $\Theta(u,\ell)-\Theta(u,0)$ no depèn de $u$.
+          \end{resolution}
+    \item Proveu que $\Theta(1,\ell)-\Theta(1,0)=2\pi$.
+          \begin{resolution}
+            Ja sabem que $\Theta(1,0)=0$ pel que hem comentat al final de l'apartat \ref{apartat2}. D'altra banda, $c_1(\ell)=(0,0)$ i llavors $\Psi(c_1(\ell))=\vf{x}'(\ell)=\vf{x}'(0)=(1,0)$. Però en aquest cas $\Theta(1,\ell)=2\pi$, degut a la continuïtat de $\Theta$. En efecte, fixem-nos que $c_1(t)$, $0<t<\ell/2$, té la primera component fixada a l'origen i l'altre és positiva. Per tant, el vector $\Psi(c_1(t))$, $0<t<\ell/2$, anirà dirigit sempre des de l'origen fins un punt per sobre l'eix $x$. Per tant, $\Psi(c_1(t))$ formarà sempre un angle $\Theta(1,t)\in(0,\pi)$ amb l'eix $x$. Per continuïtat i tenint en compte que $$\cos(\Theta(1,\ell/2))=\langle\Psi(c_1(\ell/2)),e_1\rangle=\langle\Psi(0,\ell),e_1\rangle=\langle-\vf{x}'(0),e_1\rangle=-1\implies\Theta(1,\ell/2)\in\pi+2\pi\ZZ$$ deduïm que $\Theta(1,\ell/2)=\pi$. A partir de llavors, és a dir, per $\ell/2<t<\ell$, $c_1(t)$ té la primera component variant i la segona fixada. Per tant, el vector $\Psi(c_1(t))$ anirà dirigit sempre des d'un punt per sobre l'eix $x$ fins l'origen, i en conseqüència $\Theta(1,t)\in(\pi,2\pi)$. Per tant, per continuïtat i tenint en compte que $$\cos(\Theta(1,\ell))=\langle\Psi(c_1(\ell)),e_1\rangle=\langle\Psi((\ell,\ell)),e_1\rangle=\langle \vf{x}'(\ell),e_1\rangle=1\implies\Theta(1,\ell)\in2\pi \ZZ$$
+            tindrem $\Theta(1,\ell)=2\pi$. Per tant, $\Theta(1,\ell)-\Theta(1,0)=2\pi$.
+          \end{resolution}
+    \item Deduïu l'Umlaufsatz.
+          \begin{resolution}
+            Fixem-nos que si $\vf{T}(t)=(x'(t),y'(t))$ és el vector tangent a $\vf{x}$ en el punt $\vf{x}(t)$, tenim que $\vf{T}(t)=\Psi(c_0(t))=(\cos(\Theta(0,t)),\sin(\Theta(0,t)))$. D'altra banda (pel vist a l'exercici 1 del seminari), $\vf{T}(t)=(\cos(\theta(t)),\sin(\theta(t)))$ on $\theta(t)=\int_0^t[x'(t)y''(t)-x''(t)y'(t)]\dd s$. D'aquí, juntament amb el fet que $\theta(0)=\Theta(0,0)=0$, deduïm que $\theta(t)=\Theta(0,t)$ $\forall t\in[0,\ell]$. Per tant, la curvatura total de $\vf{x}$ és:
+            $$\int_0^\ell k(t)\dd{t}=\theta(\ell)-\theta(0)=\Theta(0,\ell)-\Theta(0,0)$$
+            Ara bé, combinant els dos últims apartats, deduïm que $\Theta(0,\ell)-\Theta(0,0)=2\pi$ i, per tant, el nombre de rotació és 1.
+
+            A l'enunciat hem suposat que el sentit ``global'' de gir de la corba era l'antihorari. Si suposem ara que $\vf{x}'(0)=(-1,0)$, aleshores fent uns raonaments completament anàlegs als ja fets en apartats anteriors obtindrem que $\Theta(1,\ell)-\Theta(1,0)=-2\pi$, $\Theta(0,\ell)-\Theta(0,0)=-2\pi$ i, per tant, el nombre de rotació serà $-1$.
+          \end{resolution}
+  \end{enumerate}
+\end{exercice}
+\vspace{0.5cm}
+
+\end{document}

@@ -1,0 +1,166 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsthm, amsmath, mathtools, amssymb}
+\usepackage[left=1.8cm,right=1.8cm,top=2cm,bottom=2cm]{geometry}
+\usepackage[colorlinks,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\usepackage{array}
+\usepackage[catalan]{babel}
+\usepackage[affil-it]{authblk}
+\usepackage{physics}
+
+\newcommand{\vf}[1]{\boldsymbol{\mathrm{#1}}} % math style for vectors and matrices and vector-values functions (previously it was \*vb{#1} but this does not apply to greek letters)
+\newcommand{\RR}{\ensuremath{\mathbb{R}}}
+\newcommand{\ZZ}{\ensuremath{\mathbb{Z}}}
+\newcommand{\NN}{\ensuremath{\mathbb{N}}}
+
+\newcommand{\function}[5]{
+  \if\relax\detokenize{#1}\relax % first argument empty
+  \begin{array}{c@{\hspace{0.5\tabcolsep}}c@{\hspace{0.5\tabcolsep}}c}
+    #2 & \longrightarrow & #3                     \\
+    #4 & \longmapsto     & #5
+  \end{array}
+  \else % first argument non-empty
+  \begin{array}{r@{\hspace{0.5\tabcolsep}}c@{\hspace{0.5\tabcolsep}}c@{\hspace{0.5\tabcolsep}}c}
+    #1: & #2 & \longrightarrow & #3                     \\
+        & #4 & \longmapsto     & #5
+  \end{array}
+  \fi
+} % 1 - name of the function
+  % 2 - domain
+  % 3 - image
+  % 4 - element in the domain
+  % 5 - element in the image
+
+\DeclareDocumentCommand\derivative{ s o m g d() }{ 
+  % Total derivative
+  % s: star for \flatfrac flat derivative
+  % o: optional n for nth derivative
+  % m: mandatory (x in df/dx)
+  % g: optional (f in df/dx)
+  % d: long-form d/dx(...)
+    \IfBooleanTF{#1}
+    {\let\fractype\flatfrac}
+    {\let\fractype\frac}
+    \IfNoValueTF{#4}
+    {
+        \IfNoValueTF{#5}
+        {\fractype{\diffd \IfNoValueTF{#2}{}{^{#2}}}{\diffd #3\IfNoValueTF{#2}{}{^{#2}}}}
+        {\fractype{\diffd \IfNoValueTF{#2}{}{^{#2}}}{\diffd #3\IfNoValueTF{#2}{}{^{#2}}} \argopen(#5\argclose)}
+    }
+    {\fractype{\diffd \IfNoValueTF{#2}{}{^{#2}} #3}{\diffd #4\IfNoValueTF{#2}{}{^{#2}}}\IfValueT{#5}{(#5)}}
+} % differential operator
+\DeclareDocumentCommand\partialderivative{ s o m g d() }{ 
+  % Total derivative
+  % s: star for \flatfrac flat derivative
+  % o: optional n for nth derivative
+  % m: mandatory (x in df/dx)
+  % g: optional (f in df/dx)
+  % d: long-form d/dx(...)
+  \IfBooleanTF{#1}
+    {\let\fractype\flatfrac}
+    {\let\fractype\frac}
+    \IfNoValueTF{#4}{
+      \IfNoValueTF{#5}
+      {\fractype{\partial \IfNoValueTF{#2}{}{^{#2}}}{\partial #3\IfNoValueTF{#2}{}{^{#2}}}}
+      {\fractype{\partial \IfNoValueTF{#2}{}{^{#2}}}{\partial #3\IfNoValueTF{#2}{}{^{#2}}} \argopen(#5\argclose)}
+    }
+    {\fractype{\partial \IfNoValueTF{#2}{}{^{#2}} #3}{\partial #4\IfNoValueTF{#2}{}{^{#2}}}\IfValueT{#5}{(#5)}}
+} % partial differential operator
+
+\newtheoremstyle{math}
+{\topsep}   % ABOVESPACE
+{\topsep}   % BELOWSPACE
+{}  % BODYFONT
+{0pt}       % INDENT (empty value is the same as 0pt)
+{\bfseries} % HEADFONT
+{.}         % HEADPUNCT
+{5pt plus 1pt minus 1pt} % HEADSPACE
+{\thmname{#1}\thmnumber{}%
+\thmnote{{ \bfseries(#3)}}}   
+
+\newtheorem{exercice}{Exercici}
+\theoremstyle{remark}
+\newtheorem*{resolution}{Resolució}
+\theoremstyle{math}
+\newtheorem{theorem}{Teorema}
+\DeclareMathOperator{\Int}{Int} % interior set
+\DeclareMathOperator{\vol}{vol} % volume
+\DeclareMathOperator{\Fr}{\partial} % boundary set
+
+\renewcommand{\theenumi}{\alph{enumi})}
+\renewcommand{\labelenumi}{\alph{enumi})}
+
+\title{\bfseries\large SEMINARI 9. INTEGRACIÓ DE FORMES DIFERENCIALS.}
+
+\author{Víctor Ballester Ribó\endgraf NIU: 1570866}
+\date{\parbox{\linewidth}{\centering
+  Geometria diferencial\endgraf
+  Grau en Matemàtiques\endgraf
+  Universitat Autònoma de Barcelona\endgraf
+  Juny de 2022}}
+
+\setlength{\parindent}{0pt}
+
+\begin{document}
+\selectlanguage{catalan}
+\maketitle
+\setcounter{exercice}{4}
+\begin{exercice}
+  Considereu la 2-forma $\omega=z\dd{x}\wedge\dd{y}$ i la subvarietat amb vora $$V=\{(x,y,z)\in\RR^3:{\left(\sqrt{x^2+y^2}-R\right)}^2+z^2\leq r^2\}$$ de $\RR^3$. Calculeu $\int_V\dd{\omega}$ i $\int_{\Fr{V}}\omega$ amb les orientacions induïdes per l'orientació canònica de $\RR^3$.
+  \begin{resolution}
+    Observem que $V$ es tracta d'un tor massís de radi major $R$ i radi menor $r$. La seva vora és doncs: $$\Fr{V}=\{(x,y,z)\in\RR^3:{\left(\sqrt{x^2+y^2}-R\right)}^2+z^2= r^2\}$$
+    Calculem primer $\int_V\dd{\omega}$. Tenim que:
+    $$\dd\omega=\dd{z}\wedge\dd{x}\wedge\dd{y}=\dd{x}\wedge\dd{y}\wedge\dd{z}=\eta$$
+    on $\eta$ és l'element de volum de $\RR^3$. Per tant, $\int_V\dd{\omega}=\int_V\eta=\vol(V)$ ja que l'orientació que agafem és la canònica. Ara considerem el canvi de variables:
+    $$\function{\psi}{(0,2\pi)\times(0,2\pi)\times(0,r)}{V}{(u,v,\rho)}{((R+\rho\cos v)\cos u,(R+\rho\cos v)\sin u,\rho\sin v)}$$
+    El jacobià del canvi és: $$J\psi=\begin{vmatrix}
+        \pdv{\psi}{u}
+        \pdv{\psi}{v}
+        \pdv{\psi}{\rho}
+      \end{vmatrix}=\begin{vmatrix}
+        -(R+\rho\cos v)\sin u & -\rho\sin v\cos u & \cos v\cos u \\
+        (R+\rho\cos v)\cos u  & -\rho\sin v\sin u & \cos v\sin u \\
+        0                     & \rho\cos v        & \sin v
+      \end{vmatrix}=(R+\rho\cos v)\rho$$
+    Així doncs:
+    \begin{align*}
+      \int_V\dd{\omega}=\vol(V) & =\iiint_{(0,2\pi)\times(0,2\pi)\times(0,r)}\abs{J\psi}\dd{u}\dd{v}\dd{\rho}      \\
+                                & =\int_0^r\int_0^{2\pi}\int_0^{2\pi}\abs{(R+\rho\cos v)\rho}\dd{u}\dd{v}\dd{\rho} \\
+                                & =2\pi\int_0^r\int_0^{2\pi}(R+\rho\cos v)\rho\dd{v}\dd{\rho}                      \\
+                                & =2\pi\int_0^r\int_0^{2\pi}R\rho\dd{v}\dd{\rho}                                   \\
+                                & =4\pi^2R\int_0^r \rho\dd{\rho}                                                   \\
+                                & =4\pi^2R\cdot\frac{r^2}{2}                                                       \\
+                                & = 2\pi^2 r^2R
+    \end{align*}
+    on en la cinquena igualtat hem fet servir la simetria del cosinus a l'interval $[0,2\pi]$.
+
+    Calculem ara $\int_{\Fr{V}}\omega$. Per això prenem la parametrització de la vora de $V$ següent:
+    $$\function{\varphi}{(0,2\pi)\times(0,2\pi)}{\Fr{V}}{(u,v)}{\psi(u,v,r)=((R+r\cos v)\cos u,(R+r\cos v)\sin u,r\sin v)}$$
+    Fent càlculs deduïm els següents resultants:
+    \begin{align*}
+      \varphi_u                & =\left(-(R+r\cos v)\sin u,(R+r\cos v)\cos u,0\right)                               \\
+      \varphi_v                & =\left(-r\sin v\cos u,-r\sin v\sin u,r\cos v\right)                                \\
+      \varphi_u\times\varphi_v & =\left(r\cos u\cos v(R+r\cos v),r\sin u\cos v(R+r\cos v),r\sin v(R+r\cos v)\right)
+    \end{align*}
+    En el punt $(u,v)=(0,0)$, tenim $(\varphi_u\times\varphi_v)(0,0)=(R+r,0,0)$. Per tant, el vector normal en aquest punt serà $(1,0,0)$ que apunta cap a fora del tor. Per continuïtat (ja que el vector normal és un camp diferenciable) deduïm que la parametrització $\varphi$ és compatible amb l'orientació de $\Fr{V}$. Calculem ara el pull-back $\varphi^*\omega$:
+    \begin{align*}
+      \varphi^*\omega & =r\sin v\dd{[(R+r\cos v)\cos u]}\wedge\dd{[(R+r\cos v)\sin u]}                                              \\
+                      & =r\sin v[-(R+r\cos v)\sin u\dd{u}-r\sin v\cos u\dd{v}]\wedge[(R+r\cos v)\cos u\dd{u}-r\sin v\sin u\dd{v}]   \\
+                      & =r\sin v[(R+r\cos v)r\sin v{(\sin u)}^2\dd{u}\wedge\dd{v}-(R+r\cos v)r\sin v{(\cos u)}^2\dd{v}\wedge\dd{u}] \\
+                      & =r^2{(\sin v)}^2(R+r\cos v)\dd{u}\wedge\dd{v}                                                               \\
+    \end{align*}
+    Per tant:
+    \begin{align*}
+      \int_{\Fr{V}}\omega =\iint_{{(0,2\pi)}^2}\varphi^*\omega & =\iint_{{(0,2\pi)}^2}r^2{(\sin v)}^2(R+r\cos v)\dd{u}\wedge\dd{v} \\
+                                                               & =\int_0^{2\pi}\int_0^{2\pi}r^2{(\sin v)}^2(R+r\cos v)\dd{u}\dd{v} \\
+                                                               & =2\pi\int_0^{2\pi}r^2{(\sin v)}^2(R+r\cos v)\dd{v}                \\
+                                                               & =2\pi\int_0^{2\pi}r^2{(\sin v)}^2R\dd{v}                          \\
+                                                               & =2\pi r^2R\cdot \pi                                               \\
+                                                               & = 2\pi^2 r^2R
+    \end{align*}
+    on en l'antepenúltima igualtat hem fet servir de nou la simetria del cosinus a l'interval $[0,2\pi]$ i al final hem utilitzat que $\int_0^{2\pi}{(\sin v)}^2\dd{v}=\pi$.
+
+    Com era d'esperar, pel teorema de Stokes, els dos resultats coincideixen.
+  \end{resolution}
+\end{exercice}
+\end{document}

@@ -1,0 +1,204 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsthm, amsmath, mathtools, amssymb}
+\usepackage[left=1.8cm,right=1.8cm,top=2cm,bottom=2cm]{geometry}
+\usepackage[colorlinks,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\usepackage{array}
+\usepackage[catalan]{babel}
+\usepackage[affil-it]{authblk}
+\usepackage{physics}
+
+\newcommand{\vf}[1]{\boldsymbol{\mathrm{#1}}} % math style for vectors and matrices and vector-values functions (previously it was \*vb{#1} but this does not apply to greek letters)
+\newcommand{\RR}{\ensuremath{\mathbb{R}}}
+\newcommand{\ZZ}{\ensuremath{\mathbb{Z}}}
+\newcommand{\NN}{\ensuremath{\mathbb{N}}}
+
+\DeclareDocumentCommand\derivative{ s o m g d() }{ 
+  % Total derivative
+  % s: star for \flatfrac flat derivative
+  % o: optional n for nth derivative
+  % m: mandatory (x in df/dx)
+  % g: optional (f in df/dx)
+  % d: long-form d/dx(...)
+    \IfBooleanTF{#1}
+    {\let\fractype\flatfrac}
+    {\let\fractype\frac}
+    \IfNoValueTF{#4}
+    {
+        \IfNoValueTF{#5}
+        {\fractype{\diffd \IfNoValueTF{#2}{}{^{#2}}}{\diffd #3\IfNoValueTF{#2}{}{^{#2}}}}
+        {\fractype{\diffd \IfNoValueTF{#2}{}{^{#2}}}{\diffd #3\IfNoValueTF{#2}{}{^{#2}}} \argopen(#5\argclose)}
+    }
+    {\fractype{\diffd \IfNoValueTF{#2}{}{^{#2}} #3}{\diffd #4\IfNoValueTF{#2}{}{^{#2}}}\IfValueT{#5}{(#5)}}
+} % differential operator
+\DeclareDocumentCommand\partialderivative{ s o m g d() }{ 
+  % Total derivative
+  % s: star for \flatfrac flat derivative
+  % o: optional n for nth derivative
+  % m: mandatory (x in df/dx)
+  % g: optional (f in df/dx)
+  % d: long-form d/dx(...)
+  \IfBooleanTF{#1}
+    {\let\fractype\flatfrac}
+    {\let\fractype\frac}
+    \IfNoValueTF{#4}{
+      \IfNoValueTF{#5}
+      {\fractype{\partial \IfNoValueTF{#2}{}{^{#2}}}{\partial #3\IfNoValueTF{#2}{}{^{#2}}}}
+      {\fractype{\partial \IfNoValueTF{#2}{}{^{#2}}}{\partial #3\IfNoValueTF{#2}{}{^{#2}}} \argopen(#5\argclose)}
+    }
+    {\fractype{\partial \IfNoValueTF{#2}{}{^{#2}} #3}{\partial #4\IfNoValueTF{#2}{}{^{#2}}}\IfValueT{#5}{(#5)}}
+} % partial differential operator
+
+\newtheoremstyle{math}
+{\topsep}   % ABOVESPACE
+{\topsep}   % BELOWSPACE
+{}  % BODYFONT
+{0pt}       % INDENT (empty value is the same as 0pt)
+{\bfseries} % HEADFONT
+{.}         % HEADPUNCT
+{5pt plus 1pt minus 1pt} % HEADSPACE
+{\thmname{#1}\thmnumber{}%
+\thmnote{{ \bfseries(#3)}}}   
+
+\newtheorem{exercice}{Exercici}
+\theoremstyle{remark}
+\newtheorem*{resolution}{Resolució}
+\theoremstyle{math}
+\newtheorem{theorem}{Teorema}
+\DeclareMathOperator{\Int}{Int} % interior set
+
+\renewcommand{\theenumi}{\alph{enumi})}
+\renewcommand{\labelenumi}{\alph{enumi})}
+
+\title{\bfseries\large SEMINARI 9. SUPERFÍCIES REGLADES.}
+
+\author{Víctor Ballester Ribó\endgraf NIU: 1570866}
+\date{\parbox{\linewidth}{\centering
+  Geometria diferencial\endgraf
+  Grau en Matemàtiques\endgraf
+  Universitat Autònoma de Barcelona\endgraf
+  Maig de 2022}}
+
+\setlength{\parindent}{0pt}
+
+\begin{document}
+\selectlanguage{catalan}
+\maketitle
+\setcounter{exercice}{4}
+\begin{exercice}
+  Sigui $\alpha = \alpha(t)$ una corba regular de $\RR^3$ parametritzada per l'arc. La superfície polar de $\alpha$ és la superfície reglada formada per les rectes para\lgem eles a la binormal (en cada punt) que passen pel centre de curvatura (en aquest punt). Concretament $$\varphi(t, s) = \alpha(t) + \rho(t)\vf{N}(t) + s\vf{B}(t)$$ on $\rho(t)$ és el radi de curvatura de $\alpha$. La recta que obtenim en fixar $t$ i variar $s$ es diu \emph{eix polar}.
+  \begin{enumerate}
+    \item Demostreu que aquesta definició coincideix amb la clàssica: La superfície polar de $\alpha$ és l'envolvent dels plans normals.
+          \begin{resolution}
+            Al llarg del problema assumirem que en tot moment tenim que la curvatura i torsió de $\alpha$ no s'anu\lgem en. La primera assumpció té sentit per tal que la funció $\rho(t)$ tingui sentit. Per a la segona, tindríem que si la torsió fos zero, la corba seria plana i la superfície polar seria un cilindre. A més, com veurem més endavant no podria tenir eix de regressió. Per tant, és millor suposar que la torsió no s'anu\lgem a.\\
+            El pla normal $\Pi_t$ a una corba $\alpha$ en el punt $\alpha(t)$ és el generat pels vectors normal $\vf{N}(t)$ i binormal $\vf{B}(t)$. Per tant, l'equació d'aquest pla és: $$\Pi_t(\vf{x}):=\langle\vf{x}-\alpha(t),\vf{T}\rangle=0$$
+            Escrivim una parametrització de la superfície que busquem usant la base de Frenet en l'instant $t$:
+            $$\varphi(t,s)=\alpha(t)+a(t,s)\vf{T}+b(t,s)\vf{N}+c(t,s)\vf{B}$$ per a certes funcions diferenciables $a$, $b$, $c$ que hem de determinar. Com que l'envolvent dels plans normals és tangent en cada punt a un d'aquests plans, tindrem que els punts d'aquesta superfície satisfan el sistema d'equacions següent:
+            $$
+              \left\{
+              \begin{aligned}
+                \Pi_t(\vf{x})\Big|_{\vf{x}=\varphi(t,s)}           & =\langle\vf{x}-\alpha(t),\vf{T}\rangle\Big|_{\vf{x}=\varphi(t,s)} =\langle\varphi(t,s)-\alpha(t),\vf{T}\rangle=0                                   \\
+                \pdv{\Pi_t}{t}(\vf{x})\bigg|_{\vf{x}=\varphi(t,s)} & =\langle-\vf{T},\vf{T}\rangle+\langle\vf{x}-\alpha(t),k\vf{N}\rangle\Big|_{\vf{x}=\varphi(t,s)} =-1+k\langle\varphi(t,s)-\alpha(t),\vf{N}\rangle=0 \\
+              \end{aligned}
+              \right.
+            $$
+            on hem utilitzat que $\vf{T}'=k\vf{N}$, essent $k$ la curvatura de $\alpha$. De la primera equació deduïm que $a(t,s)=0$ i de la segona:
+            \begin{align*}
+              \pdv{\Pi_t}{t}(\vf{x})\bigg|_{\vf{x}=\varphi(t,s)}=0 & \iff -1+k(t)\langle\varphi(t,s)-\alpha(t),\vf{N}\rangle=0  \\
+                                                                   & \iff k(t)\langle b(t,s)\vf{N}+c(t,s)\vf{B},\vf{N}\rangle=1 \\
+                                                                   & \iff k(t)b(t,s)=1
+            \end{align*}
+            Per tant, necessitem $b(t,s)=1/k(t)=\rho(t)$. Observem que per a qualsevol funció $c(t,s)$, $\varphi(t,s)$ compleix les condicions requerides. Per tant, aquesta ha de ser $c(t,s)=s$, fent aparèixer un nou parametre lliure. Així doncs, obtenim finalment el que volíem:
+            $$\varphi(t, s) = \alpha(t) + \rho(t)\vf{N}(t) + s\vf{B}(t)$$
+          \end{resolution}
+    \item Trobeu els centres de les esferes osculatrius, que són aquelles amb contacte d'ordre 3 amb $\alpha(t)$. Comproveu que pertanyen a la superfície polar.\\
+          \emph{Indicació}: L'esfera $$S(x,y,z):=(\vf{x}-\vf{a})\cdot(\vf{x}-\vf{a})-R^2=0$$ té contacte d'ordre $k$ amb $\alpha(t)$ en el punt $t_0$ si $$\dv[i]{}{t}S(\alpha(t_0))=0\quad i=0,\ldots,k$$ Comproveu que les esferes amb centre l'eix polar que passen pel corresponent punt de $\alpha$ tenen contacte d'ordre 2 amb la corba.
+          \begin{resolution}
+            Siguin $c(t_0)$ i $r(t_0)$ el centre i el radi, respectivament, de l'esfera osculatriu $S_{t_0}(\vf{x})=0$ de la corba $\alpha$ en el punt $\alpha(t_0)$. Per tant, podem escriure: $$S_{t_0}(\vf{x})=\langle\vf{x}-c(t_0),\vf{x}-c(t_0)\rangle-{r(t_0)}^2=0$$ Escrivim el vector $\alpha(t_0)-c(t_0)$ en termes de la base de Frenet en l'instant $t_0$: $$\alpha(t_0)-c(t_0)=\lambda(t_0)\vf{T}(t_0)+\mu(t_0)\vf{N}(t_0)+\eta(t_0)\vf{B}(t_0)$$
+            per a certes funcions diferenciables $\lambda$, $\mu$, $\eta$ que hem de determinar. Per això imposem les condicions següents, per assegurar el contacte d'ordre $\geq 3$:
+            \begin{equation}\label{sphere}
+              \left\{
+              \begin{aligned}
+                S_{t_0}(\alpha(t_0))=0                       \\
+                \dv{}{t}S_{t_0}(\alpha(t))\Big|_{t=t_0}=0    \\
+                \dv[2]{}{t}S_{t_0}(\alpha(t))\Big|_{t=t_0}=0 \\
+                \dv[3]{}{t}S_{t_0}(\alpha(t))\Big|_{t=t_0}=0
+              \end{aligned}
+              \right.
+            \end{equation}
+            Perquè es compleixi la primera equació simplement cal definir convenientment el radi $r(t_0)$ de l'esfera osculatriu com: $$r(t_0)=\|\alpha(t_0)-c(t_0)\|$$ Aleshores trivialment es compleix la primera condició.
+            Desenvolupant la segona expressió obtenim $$\dv{}{t}S_{t_0}(\alpha(t))\Big|_{t=t_0}=\dv{}{t}\left(\langle\alpha(t)-c(t_0),\alpha(t)-c(t_0)\rangle-{r(t_0)}^2\right)\Big|_{t=t_0}=2\langle\vf{T},\alpha(t)-c(t_0)\rangle\Big|_{t=t_0}=0$$
+            Per tant, com que $\lambda(t_0)=\langle\vf{T}(t_0),\alpha(t_0)-c(t_0)\rangle$ obtenim que $\lambda(t_0)=0$. Ara desenvolupem la tercera expressió. Tenim que:
+            \begin{align*}
+              0 & =\dv[2]{}{t}S_{t_0}(\alpha(t))\Big|_{t=t_0}                                                     \\
+                & =\dv{}{t}\left(2\langle\vf{T},\alpha(t)-c(t_0)\rangle\right)\Big|_{t=t_0}                       \\
+                & =2\left[\langle k\vf{N},\alpha(t)-c(t_0)\rangle+\langle\vf{T},\vf{T}\rangle\right]\Big|_{t=t_0} \\
+                & =\left[2\langle k\vf{N},\alpha(t)-c(t_0)\rangle+2\right]\Big|_{t=t_0}                           \\
+                & =2\langle k(t_0)\vf{N}(t_0),\alpha(t_0)-c(t_0)\rangle+2                                         \\
+                & =2\langle k(t_0)\vf{N}(t_0),\mu(t_0)\vf{N}(t_0)+\eta(t_0)\vf{B}(t_0)\rangle+2                   \\
+                & =2k(t_0)\mu(t_0)+2
+            \end{align*}
+            Ajuntant la primera i última expressions obtenim $\mu(t_0)=-\frac{1}{k(t_0)}=-\rho(t_0)$. Finalment per la quarta equació de \eqref{sphere} tenim que:
+            \begin{align*}
+              0 & =\dv[3]{}{t}S_{t_0}(\alpha(t))\Big|_{t=t_0}                                                                                     \\
+                & =\dv{}{t}\left(2\langle k\vf{N},\alpha(t)-c(t_0)\rangle+2\right)\Big|_{t=t_0}                                                   \\
+                & =2\left[\langle k'\vf{N}+k\vf{N}',\alpha(t)-c(t_0)\rangle+2\langle k\vf{N},\vf{T}\rangle\right]\Big|_{t=t_0}                    \\
+                & =2\langle k'\vf{N}-k^2\vf{T}-k\tau\vf{B},\alpha(t)-c(t_0)\rangle\Big|_{t=t_0}                                                   \\
+                & =2\langle k'(t_0)\vf{N}(t_0)-{k(t_0)}^2\vf{T}(t_0)-k(t_0)\tau(t_0)\vf{B}(t_0),\alpha(t_0)-c(t_0)\rangle                         \\
+                & =2\langle k'(t_0)\vf{N}(t_0)-{k(t_0)}^2\vf{T}(t_0)-k(t_0)\tau(t_0)\vf{B}(t_0),-\rho(t_0)\vf{N}(t_0)+\eta(t_0)\vf{B}(t_0)\rangle \\
+                & =2\left[-k'(t_0)\rho(t_0)-k(t_0)\tau(t_0)\eta(t_0)\right]                                                                       \\
+                & =2\left[-\frac{k'(t_0)}{k(t_0)}-k(t_0)\tau(t_0)\eta(t_0)\right]
+            \end{align*}
+            I llavors: $$0=2\left[-\frac{k'(t_0)}{k(t_0)}-k(t_0)\tau(t_0)\eta(t_0)\right]\iff \eta(t_0)=-\frac{k'(t_0)}{{k(t_0)}^2\tau(t_0)}=\frac{{\left(\frac{1}{k(t_0)}\right)}'}{\tau(t_0)}=\frac{\rho'(t_0)}{\tau(t_0)}$$
+            Per tant, els centres de les esferes osculadores són:
+            \begin{equation}\label{centres}
+              c(t_0)=\alpha(t_0)-\lambda(t_0)\vf{T}(t_0)-\mu(t_0)\vf{N}(t_0)-\eta(t_0)\vf{B}(t_0)=\alpha(t_0)+\rho(t_0)\vf{N}(t_0)-\frac{\rho'(t_0)}{\tau(t_0)}\vf{B}(t_0)
+            \end{equation}
+            Observem que $c(t)=\varphi\left(t,-\frac{\rho'(t)}{\tau(t)}\right)$. Per tant, aquests centres pertanyen a la superfície polar.\\
+            Fem ara la segona part de l'apartat. Fixem un valor de $t=t_0$. Diguem $\tilde{S}_s$ a l'esfera amb centre al punt $\varphi(t_0,s)$ i tal que passa per $\alpha(t_0)$. Per tant, aquesta esfera té equació: $$\tilde{S}_s(\vf{x}):=\langle\vf{x}-\varphi(t_0,s),\vf{x}-\varphi(t_0,s)\rangle-(\rho(t_0)^2+s^2)=0$$
+            ja que $\|\varphi(t_0,s)-\alpha(t_0)\|=\rho(t_0)^2+s^2$. Clarament $\tilde{S}_s(\alpha(t_0))=0$ per hipòtesi.
+            Calculem ara $\dv{}{t}\tilde{S}_s(\alpha(t))\Big|_{t=t_0}$:
+            \begin{align*}
+              \dv{}{t}\tilde{S}_s(\alpha(t))\Big|_{t=t_0} & =\dv{}{t}(\langle\alpha(t)-\varphi(t_0,s),\alpha(t)-\varphi(t_0,s)\rangle-(\rho(t_0)^2+s^2))\Big|_{t=t_0} \\
+                                                          & =2\langle\vf{T},\alpha(t)-\varphi(t_0,s)\rangle \Big|_{t=t_0}                                             \\
+                                                          & =2\langle\vf{T}(t_0),-\rho(t_0)\vf{N}(t_0) - s\vf{B}(t_0)\rangle                                          \\
+                                                          & =0
+            \end{align*}
+            Calculem ara $\dv[2]{}{t}\tilde{S}_s(\alpha(t))$:
+            \begin{align*}
+              \dv[2]{}{t}\tilde{S}_s(\alpha(t))\Big|_{t=t_0} & =\dv{}{t}(2\langle\vf{T},\alpha(t)-\varphi(t_0,s)\rangle)\Big|_{t=t_0}                      \\
+                                                             & =2\langle\vf{T}',\alpha(t)-\varphi(t_0,s)\rangle+2\langle\vf{T},\vf{T}\rangle \Big|_{t=t_0} \\
+                                                             & =2\langle k\vf{N},\alpha(t)-\varphi(t_0,s)\rangle+2 \Big|_{t=t_0}                           \\
+                                                             & =2\langle k(t_0)\vf{N}(t_0),-\rho(t_0)\vf{N}(t_0) - s\vf{B}(t_0)\rangle+2                   \\
+                                                             & =-2k(t_0)\rho(t_0)+2                                                                        \\
+                                                             & =0
+            \end{align*}
+            Calculem ara $\dv[3]{}{t}\tilde{S}_s(\alpha(t))$:
+            \begin{align*}
+              \dv[3]{}{t}\tilde{S}_s(\alpha(t))\Big|_{t=t_0} & =\dv{}{t}(2\langle k\vf{N},\alpha(t)-\varphi(t_0,s)\rangle+2)\Big|_{t=t_0}                                                \\
+                                                             & =2\langle k'\vf{N}+k\vf{N}',\alpha(t)-\varphi(t_0,s)\rangle+2\langle k\vf{N},\vf{T}\rangle \Big|_{t=t_0}                  \\
+                                                             & =2\langle k'\vf{N}-k^2\vf{T}-k\tau\vf{B},\alpha(t)-\varphi(t_0,s)\rangle \Big|_{t=t_0}                                    \\
+                                                             & =2\langle k'(t_0)\vf{N}(t_0)-{k(t_0)}^2\vf{T}(t_0)-k(t_0)\tau(t_0)\vf{B}(t_0),-\rho(t_0)\vf{N}(t_0) - s\vf{B}(t_0)\rangle \\
+                                                             & =-2 k'(t_0)\rho(t_0)+2k(t_0)\tau(t_0)s                                                                                    \\
+                                                             & =-2\left[ k'(t_0)\rho(t_0)-k(t_0)\tau(t_0)s\right]
+            \end{align*}
+            que només s'anu\lgem a en el cas de ser $\tilde{S}_s$ l'esfera osculatriu ($s=\frac{\rho'(t_0)}{\tau(t_0)}$). Per tant, en general les esferes $\tilde{S}_s$ tenen ordre de contacte exactament 2.
+          \end{resolution}
+    \item Comproveu que la superfície polar és desenvolupable, amb eix de regressió format pels centres de les esferes osculatrius.
+          \begin{resolution}
+            Primer observem que és una superfície reglada. En efecte, la podem escriure com $$\varphi(t,s)=\beta(t)+s\gamma(t)$$ amb $\beta(t)=\alpha(t) + \rho(t)\vf{N}(t)$ i $\gamma(t)=\vf{B}(t)$. Per tant, és reglada. Per veure que és desenvolupable, cal comprovar que la curvatura de Gau\ss, $K$, és 0. Ara bé a l'exercici 1 del seminari hem vist que per a les superfícies reglades tenim que $K=0\iff f=0$, on $f$ representa el segon coeficient de la segona forma fonamental de la superfície. Per tant, hem de calcular $f=\langle\varphi_{st},\nu\rangle$ on $\nu=\frac{\varphi_t\times\varphi_s}{\|\varphi_t\times\varphi_s\|}$ és el vector normal a la superfície. Fent càlculs obtenim:
+            \begin{align*}
+              \varphi_t                & =\vf{T}+\rho'\vf{N}+\rho\vf{N}'+s\vf{B}'=(\rho'+s\tau)\vf{N}-\rho\tau\vf{B} \\
+              \varphi_s                & =\vf{B}                                                                     \\
+              \varphi_{st}             & =\vf{B}'=\tau\vf{N}                                                         \\
+              \varphi_t\times\varphi_s & =(\rho'+s\tau)\vf{T}                                                        \\
+              \nu                      & =\vf{T}
+            \end{align*}
+            Per tant, $f=\langle\varphi_{st},\nu\rangle=\tau\langle\vf{N},\vf{T}\rangle=0$ el que demostra que la superfície és desenvolupable. A més com que $\gamma'=\vf{B}'=\tau\vf{N}\ne 0$ (perquè per hipòtesi $\tau\ne 0$) tenim que, també per l'exercici 1 del seminari, existeix una corba $s=h(t)$ on la superfície deixa de ser regular. Recordem que una de les condicions equivalents a ser regular és que $\|\varphi_t\times\varphi_s\|\ne 0$. Per tant busquem una corba $s=h(t)$ tal que $\|\varphi_t\times\varphi_s\|\big|_{s=h(t)}=0$. Recodant els càlculs fets anteriorment, això passa quan:
+            $$\|\varphi_t\times\varphi_s\|\big|_{s=h(t)}=0\iff \|(\rho'+h(t)\tau)\vf{T} \|=0\iff \rho'+h(t)\tau= 0\iff h(t)=-\frac{\rho'(t)}{\tau(t)}$$
+            Per tant, l'eix de regressió de la superfície és la corba $$\varphi(t,h(t))=\varphi\left(t,-\frac{\rho'(t)}{\tau(t)}\right)= \alpha(t) + \rho(t)\vf{N}(t) - \frac{\rho'(t)}{\tau(t)}\vf{B}(t)$$
+            que correspon amb l'equació \eqref{centres} dels centres de curvatura de les esferes osculatrius.
+          \end{resolution}
+  \end{enumerate}
+\end{exercice}
+\end{document}

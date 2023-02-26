@@ -1,0 +1,118 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsthm, amsmath, mathtools, amssymb}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+\usepackage[colorlinks,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\usepackage{array}
+\usepackage[catalan]{babel}
+\usepackage[affil-it]{authblk}
+
+\newcommand{\vf}[1]{\boldsymbol{\mathrm{#1}}} % math style for vectors and matrices and vector-values functions (previously it was \*vb{#1} but this does not apply to greek letters)
+\newcommand{\RR}{\ensuremath{\mathbb{R}}}
+
+\newtheorem{theorem}{Teorema}
+\newtheorem{prop}{Proposition}
+\theoremstyle{definition}
+\newtheorem{definition}{Definició}
+
+\renewcommand{\O}[1]{\mathrm{O}\left(#1\right)}
+
+\title{\bfseries\large SEMINARI 1. CORBES PLANES.}
+
+\author{Víctor Ballester Ribó\endgraf NIU: 1570866}
+\date{\parbox{\linewidth}{\centering
+  Geometria diferencial\endgraf
+  Grau en Matemàtiques\endgraf
+  Universitat Autònoma de Barcelona\endgraf
+  Febrer de 2022}}
+
+\setlength{\parindent}{0pt}
+\begin{document}
+\selectlanguage{catalan}
+\maketitle
+\textbf{Exercici 3.}
+\textit{Considerem una parametrització regular $\vf{x}(t) = (x(t),y(t))$ d'una corba plana. Cerquem la circumferència que millor aproxima a la corba en el punt $\vf{x}(0) = (0,0)$.  Per això considerem el desenvolupament de Taylor en $t= 0$ de $x(t)$ i $y(t)$:
+  \begin{equation}\label{taylor}
+    x(t) =x_0't+x_0''\frac{t^2}{2}+\O{t^3}\quad\text{i}\quad y(t) =y_0't+y_0''\frac{t^2}{2}+\O{t^3}
+  \end{equation}
+  Considerem la circumferència que passa pels punts $\vf{x}(-\varepsilon)$, $\vf{x}(0)$ i $\vf{x}(\varepsilon)$. El seu centre $\vf{c}(\varepsilon) =(c_x(\varepsilon),c_y(\varepsilon))$ és la intersecció de les mediatrius dels dos segments que uneixen els punts $\vf{x}(-\varepsilon)$ i $\vf{x}(0)$ d'una banda i els punts $\vf{x}(0)$ i $\vf{x}(\varepsilon)$ d'una altra. El seu radi és $r(\varepsilon) =\|\vf{c}(\varepsilon)-\vf{x}(0)\|$. El centre i el radi de curvatura venen donats pels límits de $\vf{c}(\varepsilon)$ i $r(\varepsilon)$ quan $\varepsilon\to 0$. Calculeu aquests límits en funció de $x_0'$, $x_0''$, $y_0'$ i $y_0''$.}
+\vspace{0.5cm}
+
+\textbf{Resolució.} Primer de tot suposem que la curvatura $\kappa$ de $\vf{x}(t)$ en $t=0$ és estrictament positiva, ja que contràriament no podríem definir el cercle osculador\footnote{O si el definíssim, aquest tindria radi $+\infty$ i, per tant, el seu centre estaria a l'infinit.}. Considerem la circumferència que passa pels punts $\vf{x}(-\varepsilon)$, $\vf{x}(0)$ i $\vf{x}(\varepsilon)$. El seu centre vindrà determinat per la intersecció de les mediatrius dels dos segments que uneixen els punts $\vf{x}(-\varepsilon)$ i $\vf{x}(0)$ d'una banda i els punts $\vf{x}(0)$ i $\vf{x}(\varepsilon)$ d'una altra. Per tant, calculem una parametrització d'aquestes mediatrius. Una parametrització per a la primera mediatriu ($\ell_+$) sabem que és per exemple
+$$\ell_+(\lambda)=\left(\frac{x(\varepsilon)}{2},\frac{y(\varepsilon)}{2}\right)+\lambda\left(-y(\varepsilon),x(\varepsilon)\right)\qquad \lambda\in\RR$$
+ja que $\left(\frac{x(\varepsilon)}{2},\frac{y(\varepsilon)}{2}\right)$ és el punt mig del segment $\overline{\vf{x}(\varepsilon)\vf{x}(0)}$ i el vector $\overrightarrow{\left(-y(\varepsilon),x(\varepsilon)\right)}$ és perpendicular al vector director del segment $\overline{\vf{x}(\varepsilon)\vf{x}(0)}$. Anàlogament obtenim una parametrització per a l'altra mediatriu ($\ell_-$):
+\begin{equation}\label{ell-}
+  \ell_-(\mu)=\left(\frac{x(-\varepsilon)}{2},\frac{y(-\varepsilon)}{2}\right)+\mu\left(-y(-\varepsilon),x(-\varepsilon)\right)\qquad \mu\in\RR
+\end{equation}
+Calculem, doncs, el valor $\mu=\mu_0$ quan les dues rectes s'intersequen. Tenim que:
+\begin{align}\label{intersec}
+  \nonumber\ell_+(\lambda_0)=\ell_-(\mu_0) & \iff \left(\frac{x(\varepsilon)}{2},\frac{y(\varepsilon)}{2}\right)+\lambda_0\left(-y(\varepsilon),x(\varepsilon)\right)=\left(\frac{x(-\varepsilon)}{2},\frac{y(-\varepsilon)}{2}\right)+\mu_0\left(-y(-\varepsilon),x(-\varepsilon)\right) \\
+  \nonumber                                & \iff  \left(\frac{x(\varepsilon)-x(-\varepsilon)}{2},\frac{y(\varepsilon)-y(-\varepsilon)}{2}\right)=\left(\lambda_0y(\varepsilon)-\mu_0y(-\varepsilon),-\lambda_0x(\varepsilon)+\mu_0x(-\varepsilon)\right)                                 \\
+                                           & \iff\left\{
+  \begin{array}{l}
+    \frac{x(\varepsilon)-x(-\varepsilon)}{2}=\lambda_0y(\varepsilon)-\mu_0y(-\varepsilon) \\
+    \frac{y(\varepsilon)-y(-\varepsilon)}{2}=-\lambda_0x(\varepsilon)+\mu_0x(-\varepsilon)
+  \end{array}\right.
+\end{align}
+Multiplicant la primera equació de \eqref{intersec} per $x(\varepsilon)$, la segona per $y(\varepsilon)$ i sumant les equacions resultants, obtenim:
+\begin{equation}\label{mu}
+  \frac{x(\varepsilon)-x(-\varepsilon)}{2}x(\varepsilon)+\frac{y(\varepsilon)-y(-\varepsilon)}{2}y(\varepsilon)=\mu_0\left[x(-\varepsilon)y(\varepsilon)-x(\varepsilon)y(-\varepsilon)\right]
+\end{equation}
+D'altra banda, per l'equació \eqref{taylor}, tenim que:
+\begin{equation}\label{eps}
+  x(\pm\varepsilon) =\pm x_0'\varepsilon+x_0''\frac{\varepsilon^2}{2}+\O{\varepsilon^3}\quad\text{i}\quad y(\pm\varepsilon) =\pm y_0'\varepsilon+y_0''\frac{\varepsilon^2}{2}+\O{\varepsilon^3}
+\end{equation}
+Estudiem, ara, el comportament de cadascun dels termes de l'equació \eqref{mu}. Primer de tot, clarament tenim que $\frac{x(\varepsilon)-x(-\varepsilon)}{2}=x_0'\varepsilon+\O{\varepsilon^3}$. Per tant:
+$$\frac{x(\varepsilon)-x(-\varepsilon)}{2}x(\varepsilon)=\left[x_0'\varepsilon+\O{\varepsilon^3}\right]\cdot\left[x_0'\varepsilon+x_0''\frac{\varepsilon^2}{2}+\O{\varepsilon^3}\right]={x_0'}^2\varepsilon^2+\O{\varepsilon^3}$$
+Repetint el mateix argument (canviant les $x$ per les $y$), deduïm que: $$\frac{y(\varepsilon)-y(-\varepsilon)}{2}y(\varepsilon)={y_0'}^2\varepsilon^2+\O{\varepsilon^3}$$
+Finalment, com que
+\begin{equation*}
+  x(\mp\varepsilon)y(\pm\varepsilon)=\left[\mp x_0'\varepsilon+x_0''\frac{\varepsilon^2}{2}+\O{\varepsilon^3}\right]\cdot\left[\pm y_0'\varepsilon+y_0''\frac{\varepsilon^2}{2}+\O{\varepsilon^3}\right]=-x_0'y_0'\varepsilon^2\pm\left(\frac{x_0''y_0'-x_0'y_0''}{2}\right)\varepsilon^3+\O{\varepsilon^4}
+\end{equation*}
+deduïm que:
+\begin{equation}\label{doble_prod}
+  x(-\varepsilon)y(\varepsilon)-x(\varepsilon)y(-\varepsilon)=\left(x_0''y_0'-x_0'y_0''\right)\varepsilon^3+\O{\varepsilon^4}
+\end{equation}
+Per tant, l'equació \eqref{mu} esdevé:
+\begin{align*}
+  \left({x_0'}^2\varepsilon^2+\O{\varepsilon^3}\right)+\left({y_0'}^2\varepsilon^2+\O{\varepsilon^3}\right) & =\mu_0\left[\left(x_0''y_0'-x_0'y_0''\right)\varepsilon^3+\O{\varepsilon^4}\right] \\
+  {x_0'}^2+{y_0'}^2+\O{\varepsilon}                                                                         & =\mu_0\left[\left(x_0''y_0'-x_0'y_0''\right)\varepsilon+\O{\varepsilon^2}\right]
+\end{align*}
+Observem que com que la corba és regular, l'expressió ${x_0'}^2+{y_0'}^2$ no és zero. A més, si pensem els vectors $\vf{x}'(0)$ i $\vf{x}''(0)$ dins de $\RR^3$ (continguts al pla $z=0$, per exemple), observem que:
+\begin{align*}
+  \kappa(0)=0 & \iff \frac{\|\vf{x}'(0)\times\vf{x}''(0)\|}{{\|\vf{x}'(0)\|}^3}=0 \\
+              & \iff \|\vf{x}'(0)\times\vf{x}''(0)\|=0                            \\
+              & \iff  \left\|\begin{vmatrix}
+                               \vf{e}_1 & \vf{e}_2 & \vf{e}_3 \\
+                               x_0'     & y_0'     & 0        \\
+                               x_0''    & y_0''    & 0
+                             \end{vmatrix}\right\|=0                       \\
+              & \iff \|(0,0,x_0'y_0''-x_0''y_0')\|=0                              \\
+              & \iff x_0''y_0'-x_0'y_0''=0
+\end{align*}
+I com que al principi de tot hem suposat que $\kappa(0)\ne 0$, tenim que $x_0''y_0'-x_0'y_0''\ne 0$.
+
+Recordant, ara, l'expansió en sèrie de potencies $\frac{1}{1+ x}=1-x+\cdots$, tenim que:
+\begin{align*}
+  \mu_0 & =\frac{{x_0'}^2+{y_0'}^2+\O{\varepsilon}}{\left(x_0''y_0'-x_0'y_0''\right)\varepsilon+\O{\varepsilon^2}}             \\
+        & =\frac{{x_0'}^2+{y_0'}^2+\O{\varepsilon}}{\left(x_0''y_0'-x_0'y_0''\right)\varepsilon\left[1+\O{\varepsilon}\right]} \\
+        & =\frac{{x_0'}^2+{y_0'}^2+\O{\varepsilon} }{\left(x_0''y_0'-x_0'y_0''\right)\varepsilon}(1+\O{\varepsilon})           \\
+        & =\frac{{x_0'}^2+{y_0'}^2}{\left(x_0''y_0'-x_0'y_0''\right)\varepsilon}(1+\O{\varepsilon})
+\end{align*}
+Substituint aquest valor de $\mu_0$ a l'equació \eqref{ell-} obtenim:
+\begin{align*}
+  \ell_-(\mu_0) & =\left(\frac{x(-\varepsilon)}{2},\frac{y(-\varepsilon)}{2}\right)+\mu_0\left(-y(-\varepsilon),x(-\varepsilon)\right)                                                                                                \\
+                & =\left(\O\varepsilon,\O\varepsilon\right)+\frac{{x_0'}^2+{y_0'}^2}{\left(x_0''y_0'-x_0'y_0''\right)\varepsilon}(1+\O{\varepsilon})\left(y_0'\varepsilon+\O{\varepsilon^2},-x_0'\varepsilon+\O{\varepsilon^2}\right) \\
+                & =\left(\O\varepsilon,\O\varepsilon\right)+\frac{{x_0'}^2+{y_0'}^2}{x_0''y_0'-x_0'y_0''}(1+\O{\varepsilon})\left(y_0'+\O{\varepsilon},-x_0'+\O{\varepsilon}\right)                                                   \\
+                & =\left(\O\varepsilon,\O\varepsilon\right)+\frac{{x_0'}^2+{y_0'}^2}{x_0''y_0'-x_0'y_0''}\left(y_0'+\O{\varepsilon},-x_0'+\O{\varepsilon}\right)                                                                      \\
+                & =\frac{{x_0'}^2+{y_0'}^2}{x_0''y_0'-x_0'y_0''}(y_0'+\O\varepsilon,-x_0+\O\varepsilon)
+\end{align*}
+Per tant, si denotem $\displaystyle\vf{c}:=\lim_{\varepsilon\to 0}\vf{c}(\varepsilon)$, tenim que:
+\begin{equation*}
+  \vf{c}=\lim_{\varepsilon\to 0}\vf{c}(\varepsilon)=\lim_{\varepsilon\to 0}\left(y_0'\frac{{x_0'}^2+{y_0'}^2}{x_0''y_0'-x_0'y_0''}+\O{\varepsilon},-x_0'\frac{{x_0'}^2+{y_0'}^2}{x_0''y_0'-x_0'y_0''}+\O{\varepsilon}\right)=\frac{{x_0'}^2+{y_0'}^2}{x_0''y_0'-x_0'y_0''}\left(y_0',-x_0'\right)
+\end{equation*}
+Finalment, si denotem $\displaystyle r:=\lim_{\varepsilon\to 0}r(\varepsilon)=\lim_{\varepsilon\to 0}\|\vf{c}(\varepsilon)-\vf{x}(0)\|=\lim_{\varepsilon\to 0}\|\vf{c}(\varepsilon)\|$, tenint en compte que la funció norma és una funció contínua, tenim que:
+\begin{align*}
+  r=\lim_{\varepsilon\to 0}\|\vf{c}(\varepsilon)\|=\|\lim_{\varepsilon\to 0}\vf{c}(\varepsilon)\|=\left\|\frac{{x_0'}^2+{y_0'}^2}{x_0''y_0'-x_0'y_0''}\left(y_0',-x_0'\right)\right\|=\frac{{\left({x_0'}^2+{y_0'}^2\right)}^{3/2}}{|x_0''y_0'-x_0'y_0''|}
+\end{align*}
+\end{document}
